@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Лаба 5 — События в JS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      transition: background-color 0.4s;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    button {
+      margin: 8px 12px 8px 0;
+      padding: 10px 18px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    h1 {
+      transition: color 0.3s;
+    }
+    #counter-block {
+      margin: 30px 0;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    #result {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #e74c3c;
+      margin: 10px 0;
+    }
+    form {
+      margin-top: 40px;
+      padding: 20px;
+      background: #ecf0f1;
+      border-radius: 8px;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 280px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1 id="main-title">Пока тут скучно</h1>
+
+  <button id="btn-hello">Нажми меня</button>
+  <button id="btn-change-title">Сменить заголовок</button>
+  <button id="btn-random-color">Случайный фон</button>
+
+  <div id="counter-block">
+    <h2>Счётчик (кликай как бешеный)</h2>
+    <button id="btn-plus">+1</button>
+    <button id="btn-reset">Сброс</button>
+    <div id="result">0</div>
+  </div>
+
+  <form id="my-form">
+    <h2>Форма без перезагрузки страницы</h2>
+    <input type="text" id="message" placeholder="Напиши что-нибудь..." required>
+    <button type="submit">Отправить в консоль</button>
+  </form>
+
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// Всё, что ниже — твой JavaScript-код
+// ──────────────────────────────────────────────
+
+let count = 0;
+
+// 1. Просто алерт при клике
+const btnHello = document.querySelector("#btn-hello");
+btnHello.addEventListener("click", () => {
+  alert("Ха, ты всё-таки нажал! Респект.");
+});
+
+// 2. Меняем заголовок
+const title = document.querySelector("#main-title");
+const btnChangeTitle = document.querySelector("#btn-change-title");
+
+btnChangeTitle.addEventListener("click", () => {
+  const texts = [
+    "Ого, ты реально работаешь над лабой",
+    "Мама гордилась бы... наверное",
+    "JavaScript — это любовь с первого бага",
+    "Сделал лабу — можно и пивасик",
+    "404: мотивация не найдена",
+    "Ты всё ещё здесь? Уважуха"
+  ];
+  const randomText = texts[Math.floor(Math.random() * texts.length)];
+  title.textContent = randomText;
+});
+
+// 3. Случайный цвет фона
+const btnColor = document.querySelector("#btn-random-color");
+
+btnColor.addEventListener("click", () => {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
+});
+
+// 4. Счётчик кликов
+const btnPlus  = document.querySelector("#btn-plus");
+const btnReset = document.querySelector("#btn-reset");
+const output   = document.querySelector("#result");
+
+btnPlus.addEventListener("click", () => {
+  count++;
+  output.textContent = count;
+
+  if (count >= 50) {
+    output.style.color = "#e67e22";
+  }
+  if (count >= 100) {
+    output.style.color = "#c0392b";
+    title.textContent = "ТЫ ЧТО СОВСЕМ ОХРЕНЕЛ?!";
+  }
+});
+
+btnReset.addEventListener("click", () => {
+  count = 0;
+  output.textContent = "0";
+  output.style.color = "#e74c3c";
+  title.textContent = "Ну всё, обнулил...";
+});
+
+// 5. Форма без перезагрузки
+const form = document.querySelector("#my-form");
+const input = document.querySelector("#message");
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();           // ← самое важное
+
+  const text = input.value.trim();
+
+  if (text === "") {
+    alert("Бери и пиши хоть что-то, лентяй");
+    return;
+  }
+
+  console.log("Пользователь ввёл:", text);
+  console.log("Длина сообщения:", text.length);
+  console.log("В верхнем регистре:", text.toUpperCase());
+
+  // можно ещё и на странице показать, если хочется
+  title.textContent = `Ты написал: "${text}"`;
+  
+  input.value = "";        // очищаем поле
+  input.focus();           // возвращаем фокус
+});
+
+</script>
+</body>
+</html>
